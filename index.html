@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>cinelog</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0e0e0e;--surface:#161616;--surface2:#1c1c1c;
+  --border:#252525;--text:#ebebeb;--muted:#555;--muted2:#777;
+  --gold:#c9a96e;--gold-dim:rgba(201,169,110,0.1);
+  --green:#6dbe6d;--red:#e05555;
+  --r:5px;--display:'DM Serif Display',serif;--body:'DM Sans',sans-serif;
+}
+body{background:var(--bg);color:var(--text);font-family:var(--body);font-weight:300;min-height:100vh;padding:40px 20px}
+::selection{background:var(--gold-dim);color:var(--gold)}
+input,select,textarea,button{font-family:var(--body)}
+
+/* HEADER */
+header{max-width:920px;margin:0 auto 52px;display:flex;align-items:center;justify-content:space-between;padding-bottom:18px;border-bottom:1px solid var(--border)}
+.logo{font-family:var(--display);font-size:1.9rem;letter-spacing:-0.02em;color:var(--text)}
+.logo em{color:var(--gold);font-style:italic}
+.header-right{display:flex;align-items:center;gap:14px}
+.lang-btn{background:none;border:1px solid var(--border);color:var(--muted2);font-size:0.7rem;letter-spacing:0.12em;text-transform:uppercase;padding:5px 13px;border-radius:var(--r);cursor:pointer;transition:.18s}
+.lang-btn:hover{border-color:var(--gold);color:var(--gold)}
+
+/* WRAP */
+.wrap{max-width:920px;margin:0 auto}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:44px}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px 22px}
+.stat-val{font-family:var(--display);font-size:2.1rem;color:var(--text);line-height:1;margin-bottom:5px}
+.stat-val.g{color:var(--gold)}
+.stat-lbl{font-size:0.65rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted)}
+
+/* FORM */
+.sec-lbl{font-size:0.65rem;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:14px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:26px;margin-bottom:44px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:12px}
+.field{display:flex;flex-direction:column;gap:5px}
+label{font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)}
+input,select{background:var(--bg);border:1px solid var(--border);color:var(--text);font-size:0.87rem;font-weight:300;padding:9px 13px;border-radius:var(--r);outline:none;transition:.18s;width:100%}
+input:focus,select:focus{border-color:var(--gold)}
+select option{background:var(--surface)}
+.form-foot{display:flex;justify-content:flex-end;margin-top:6px}
+.btn-add{background:var(--gold);color:#0e0e0e;border:none;font-size:0.75rem;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;padding:10px 26px;border-radius:var(--r);cursor:pointer;transition:.18s}
+.btn-add:hover{opacity:.82}
+
+/* FILTERS */
+.list-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+.filters{display:flex;gap:8px;flex-wrap:wrap}
+.f-btn{background:none;border:1px solid var(--border);color:var(--muted2);font-size:0.68rem;letter-spacing:0.08em;text-transform:uppercase;padding:5px 15px;border-radius:20px;cursor:pointer;transition:.16s}
+.f-btn:hover,.f-btn.on{border-color:var(--gold);color:var(--gold);background:var(--gold-dim)}
+
+/* ROWS */
+.rows{display:flex;flex-direction:column;gap:2px}
+.row{display:grid;grid-template-columns:1fr auto auto auto;align-items:center;gap:20px;padding:14px 18px;border-radius:var(--r);border:1px solid transparent;transition:.16s}
+.row:hover{background:var(--surface);border-color:var(--border)}
+.row-title{font-family:var(--display);font-size:1.05rem}
+.row-meta{font-size:0.73rem;color:var(--muted2);margin-top:2px}
+.badge{font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;padding:3px 10px;border-radius:20px;font-weight:500;white-space:nowrap}
+.bw{background:rgba(109,190,109,.1);color:var(--green)}
+.bp{background:rgba(201,169,110,.1);color:var(--gold)}
+.bd{background:rgba(224,85,85,.1);color:var(--red)}
+.rating{font-family:var(--display);font-size:1.1rem;color:var(--gold);min-width:28px;text-align:right}
+.rating.none{color:var(--border);font-size:.8rem}
+.del-btn{background:none;border:none;color:var(--muted);font-size:0.68rem;letter-spacing:0.06em;text-transform:uppercase;padding:4px 8px;cursor:pointer;transition:.16s;font-family:var(--body)}
+.del-btn:hover{color:var(--red)}
+.empty{text-align:center;padding:60px 0;color:var(--muted);font-size:.85rem;letter-spacing:.04em}
+
+/* TOAST */
+.toast{position:fixed;bottom:28px;right:28px;background:var(--surface);border:1px solid var(--border);color:var(--text);font-size:.8rem;padding:11px 18px;border-radius:var(--r);opacity:0;transform:translateY(6px);transition:.22s;pointer-events:none;z-index:99;letter-spacing:.03em}
+.toast.on{opacity:1;transform:translateY(0)}
+.toast.ok{border-color:var(--green)}
+.toast.err{border-color:var(--red)}
+
+@media(max-width:600px){
+  .stats{grid-template-columns:1fr 1fr}
+  .grid2,.grid3{grid-template-columns:1fr}
+  .row{grid-template-columns:1fr auto}
+  .row .badge,.row .del-btn{display:none}
+  header{flex-direction:column;align-items:flex-start;gap:14px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">cine<em>log</em></div>
+  <div class="header-right">
+    <button class="lang-btn" id="langBtn" onclick="toggleLang()">ES</button>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="stats">
+    <div class="stat"><div class="stat-val" id="sTotal">0</div><div class="stat-lbl" data-en="Total" data-es="Total">Total</div></div>
+    <div class="stat"><div class="stat-val" id="sWatched">0</div><div class="stat-lbl" data-en="Watched" data-es="Vistos">Watched</div></div>
+    <div class="stat"><div class="stat-val" id="sPending">0</div><div class="stat-lbl" data-en="Pending" data-es="Pendientes">Pending</div></div>
+    <div class="stat"><div class="stat-val g" id="sAvg">—</div><div class="stat-lbl" data-en="Avg. rating" data-es="Promedio">Avg. rating</div></div>
+  </div>
+
+  <p class="sec-lbl" data-en="Add title" data-es="Agregar título">Add title</p>
+  <div class="card">
+    <div class="grid2">
+      <div class="field"><label data-en="Title" data-es="Título">Title</label><input id="fTitle"/></div>
+      <div class="field"><label data-en="Genre" data-es="Género">Genre</label><input id="fGenre" placeholder="sci-fi, drama..."/></div>
+    </div>
+    <div class="grid3">
+      <div class="field">
+        <label>Type</label>
+        <select id="fType">
+          <option value="movie" data-en="Movie" data-es="Película">Movie</option>
+          <option value="series" data-en="Series" data-es="Serie">Series</option>
+        </select>
+      </div>
+      <div class="field"><label data-en="Year" data-es="Año">Year</label><input id="fYear" type="number" placeholder="2024"/></div>
+      <div class="field"><label data-en="Rating (1–10)" data-es="Calificación (1–10)">Rating (1–10)</label><input id="fRating" type="number" step="0.1" min="1" max="10" placeholder="8.5"/></div>
+    </div>
+    <div class="grid2">
+      <div class="field">
+        <label>Status</label>
+        <select id="fStatus">
+          <option value="watched" data-en="Watched" data-es="Visto">Watched</option>
+          <option value="pending" data-en="Pending" data-es="Pendiente">Pending</option>
+          <option value="dropped" data-en="Dropped" data-es="Abandonado">Dropped</option>
+        </select>
+      </div>
+      <div class="field"><label data-en="Note" data-es="Nota">Note</label><input id="fNote"/></div>
+    </div>
+    <div class="form-foot">
+      <button class="btn-add" onclick="addTitle()" data-en="Add" data-es="Agregar">Add</button>
+    </div>
+  </div>
+
+  <div class="list-head">
+    <p class="sec-lbl" style="margin:0" data-en="Your log" data-es="Tu registro">Your log</p>
+    <div class="filters">
+      <button class="f-btn on" onclick="setFilter('all',this)" data-en="All" data-es="Todos">All</button>
+      <button class="f-btn" onclick="setFilter('watched',this)" data-en="Watched" data-es="Vistos">Watched</button>
+      <button class="f-btn" onclick="setFilter('pending',this)" data-en="Pending" data-es="Pendientes">Pending</button>
+      <button class="f-btn" onclick="setFilter('dropped',this)" data-en="Dropped" data-es="Abandonados">Dropped</button>
+    </div>
+  </div>
+  <div class="rows" id="rows"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let lang='en', filter='all';
+const KEY='cinelog_titles';
+
+const tx={
+  en:{added:'Title added.',removed:'Removed.',empty:'No titles yet.',emptyF:'Nothing here.',noRating:'—',
+    typeM:'Movie',typeS:'Series',stW:'Watched',stP:'Pending',stD:'Dropped'},
+  es:{added:'Título agregado.',removed:'Eliminado.',empty:'Sin títulos aún.',emptyF:'Nada aquí.',noRating:'—',
+    typeM:'Película',typeS:'Serie',stW:'Visto',stP:'Pendiente',stD:'Abandonado'}
+};
+
+function load(){return JSON.parse(localStorage.getItem(KEY)||'[]')}
+function save(d){localStorage.setItem(KEY,JSON.stringify(d))}
+
+function toast(msg,type='ok'){
+  const el=document.getElementById('toast');
+  el.textContent=msg;el.className=`toast on ${type}`;
+  clearTimeout(el._t);el._t=setTimeout(()=>el.className='toast',2400);
+}
+
+function toggleLang(){
+  lang=lang==='en'?'es':'en';
+  document.getElementById('langBtn').textContent=lang==='en'?'ES':'EN';
+  document.querySelectorAll('[data-en]').forEach(el=>{
+    el.textContent=el.dataset[lang];
+  });
+  render();
+}
+
+function setFilter(f,btn){
+  filter=f;
+  document.querySelectorAll('.f-btn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  render();
+}
+
+function updateStats(){
+  const data=load();
+  const watched=data.filter(d=>d.status==='watched');
+  const pending=data.filter(d=>d.status==='pending');
+  const rated=data.filter(d=>d.rating).map(d=>d.rating);
+  document.getElementById('sTotal').textContent=data.length;
+  document.getElementById('sWatched').textContent=watched.length;
+  document.getElementById('sPending').textContent=pending.length;
+  document.getElementById('sAvg').textContent=rated.length
+    ?(rated.reduce((a,b)=>a+b,0)/rated.length).toFixed(1):'—';
+}
+
+function render(){
+  updateStats();
+  const data=load();
+  const filtered=filter==='all'?data:data.filter(d=>d.status===filter);
+  const el=document.getElementById('rows');
+  if(!filtered.length){
+    el.innerHTML=`<div class="empty">${filter==='all'?tx[lang].empty:tx[lang].emptyF}</div>`;
+    return;
+  }
+  const typeLabel={movie:()=>tx[lang].typeM,series:()=>tx[lang].typeS};
+  const stLabel={watched:()=>tx[lang].stW,pending:()=>tx[lang].stP,dropped:()=>tx[lang].stD};
+  const stClass={watched:'bw',pending:'bp',dropped:'bd'};
+  el.innerHTML=[...filtered].reverse().map(item=>`
+    <div class="row">
+      <div>
+        <div class="row-title">${item.title}</div>
+        <div class="row-meta">${typeLabel[item.type]?.()??item.type}${item.genre?' · '+item.genre:''}${item.year?' · '+item.year:''}${item.note?' · <em style="color:#444">'+item.note+'</em>':''}</div>
+      </div>
+      <span class="badge ${stClass[item.status]}">${stLabel[item.status]?.()??item.status}</span>
+      <div class="rating ${item.rating?'':'none'}">${item.rating??tx[lang].noRating}</div>
+      <button class="del-btn" onclick="del('${item.id}')" data-en="Remove" data-es="Eliminar">${lang==='en'?'Remove':'Eliminar'}</button>
+    </div>
+  `).join('');
+}
+
+function addTitle(){
+  const title=document.getElementById('fTitle').value.trim();
+  if(!title)return;
+  const data=load();
+  data.push({
+    id:Date.now().toString(),
+    title,
+    type:document.getElementById('fType').value,
+    genre:document.getElementById('fGenre').value.trim()||null,
+    year:document.getElementById('fYear').value?+document.getElementById('fYear').value:null,
+    rating:document.getElementById('fRating').value?+document.getElementById('fRating').value:null,
+    status:document.getElementById('fStatus').value,
+    note:document.getElementById('fNote').value.trim()||null,
+  });
+  save(data);
+  ['fTitle','fGenre','fYear','fRating','fNote'].forEach(id=>document.getElementById(id).value='');
+  toast(tx[lang].added);
+  render();
+}
+
+function del(id){
+  const data=load().filter(d=>d.id!==id);
+  save(data);
+  toast(tx[lang].removed);
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
