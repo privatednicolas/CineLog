@@ -1,16 +1,18 @@
 <div align="center">
 
-# cinelog-api
+# CineLog
 
 **[English](#english) · [Español](#español)**
 
-![Python](https://img.shields.io/badge/Python_3.11-3776AB?style=flat&logo=python&logoColor=white)
+![HTML](https://img.shields.io/badge/HTML-E34F26?style=flat&logo=html5&logoColor=white)
+![CSS](https://img.shields.io/badge/CSS-1572B6?style=flat&logo=css3&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)
+![Python](https://img.shields.io/badge/Python-3776AB?style=flat&logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=flat&logo=fastapi&logoColor=white)
 ![SQLite](https://img.shields.io/badge/SQLite-003B57?style=flat&logo=sqlite&logoColor=white)
-![SQLModel](https://img.shields.io/badge/SQLModel-009688?style=flat&logo=fastapi&logoColor=white)
 ![License: MIT](https://img.shields.io/badge/License-MIT-white?style=flat)
 
-**REST API for personal movie & series tracking · API REST para registro personal de películas y series**
+**Personal movie & series tracker · Registro personal de películas y series**
 
 </div>
 
@@ -18,78 +20,98 @@
 
 ## English
 
-A REST API built with FastAPI for logging and rating movies and series. Think of it as a minimal personal Letterboxd — add titles, write notes, assign a rating, and mark them as watched or pending. Fully documented via the auto-generated Swagger UI at `/docs`.
+A personal movie and series tracker with a minimal dark interface. Log titles, rate them, write notes, and track your watch status — all stored locally in the browser with no backend required. Includes an optional REST API built with FastAPI and SQLite for persistent server-side storage.
 
 ### Features
 
-- **Full CRUD** — create, read, update, and delete entries for movies and series
-- **Rating system** — score each title from 1 to 10 with an optional personal note
-- **Status tracking** — mark titles as `watched`, `pending`, or `dropped`
-- **Filter & search** — query by genre, status, or rating range via query parameters
-- **Auto docs** — interactive API documentation available at `/docs` (Swagger UI) and `/redoc`
-- **Persistent storage** — SQLite database via SQLModel, no external DB setup needed
-
-### Endpoints
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET` | `/titles` | List all titles (supports filters) |
-| `GET` | `/titles/{id}` | Get a single title by ID |
-| `POST` | `/titles` | Add a new title |
-| `PUT` | `/titles/{id}` | Update a title |
-| `DELETE` | `/titles/{id}` | Delete a title |
+- **Zero-dependency frontend** — single HTML file, no framework, no build step. Open it in a browser and it works
+- **Local persistence** — all data stored in `localStorage`, survives page refreshes without a server
+- **Full CRUD** — add, filter, and remove titles from your log
+- **Watch status** — mark titles as `watched`, `pending`, or `dropped`
+- **Live stats** — total, watched count, pending count, and average rating update in real time
+- **Bilingual UI** — toggle between English and Spanish with one click
+- **Optional REST API** — FastAPI backend with SQLite, full CRUD endpoints, and auto-generated Swagger docs at `/docs`
 
 ### Project Structure
 
 ```
-cinelog-api/
-├── main.py           ← FastAPI app, route definitions
+cinelog/
+├── index.html        ← Standalone frontend, no server needed
+├── main.py           ← FastAPI backend (optional)
 ├── models.py         ← SQLModel table definitions
-├── database.py       ← DB engine and session setup
-├── schemas.py        ← Request and response schemas
-├── requirements.txt
+├── database.py       ← SQLite engine and session setup
+├── requirements.txt  ← Python dependencies (API only)
 └── README.md
 ```
 
-### Run Locally
+### Run the frontend
+
+Open `index.html` in any browser. No install, no server, no setup.
+
+### Run the API (optional)
 
 ```bash
 pip install -r requirements.txt
 uvicorn main:app --reload
 ```
 
-API available at `http://localhost:8000` · Docs at `http://localhost:8000/docs`
+API at `http://localhost:8000` · Docs at `http://localhost:8000/docs`
 
-### Example Request
+### API Endpoints
 
-```bash
-curl -X POST http://localhost:8000/titles \
-  -H "Content-Type: application/json" \
-  -d '{"title": "Interstellar", "type": "movie", "genre": "sci-fi", "rating": 9, "status": "watched", "note": "Best third act in cinema."}'
-```
-
-### How it works
-
-FastAPI reads the route definitions in `main.py` and automatically generates the OpenAPI schema. SQLModel ties Pydantic validation models directly to SQLAlchemy table definitions, so each title entry is validated on input and persisted to a local SQLite file. No migrations, no external database — just run and go.
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/titles` | List all titles (supports filters) |
+| `GET` | `/titles/{id}` | Get a single title |
+| `POST` | `/titles` | Add a new title |
+| `PUT` | `/titles/{id}` | Update a title |
+| `DELETE` | `/titles/{id}` | Delete a title |
+| `GET` | `/stats` | Counts by status, average rating, top rated |
 
 ### Tech
 
-Python · FastAPI · SQLModel · SQLite · Uvicorn · Pydantic
+HTML · CSS · JavaScript · localStorage · Python · FastAPI · SQLModel · SQLite · Uvicorn
 
 ---
 
 ## Español
 
-API REST construida con FastAPI para registrar y calificar películas y series. Es como un Letterboxd personal mínimo — agrega títulos, escribe notas, asigna una calificación y márcalos como vistos o pendientes. Completamente documentada mediante la Swagger UI autogenerada en `/docs`.
+Registro personal de películas y series con una interfaz oscura minimalista. Agrega títulos, califícalos, escribe notas y lleva el control de lo que has visto — todo guardado en el navegador sin necesidad de un servidor. Incluye una API REST opcional con FastAPI y SQLite para almacenamiento persistente del lado del servidor.
 
 ### Características
 
-- **CRUD completo** — crear, leer, actualizar y eliminar entradas de películas y series
-- **Sistema de calificación** — puntúa cada título del 1 al 10 con una nota personal opcional
-- **Seguimiento de estado** — marca títulos como `watched`, `pending` o `dropped`
-- **Filtro y búsqueda** — consulta por género, estado o rango de calificación mediante query parameters
-- **Documentación automática** — documentación interactiva disponible en `/docs` (Swagger UI) y `/redoc`
-- **Almacenamiento persistente** — base de datos SQLite via SQLModel, sin configuración de DB externa
+- **Frontend sin dependencias** — un solo archivo HTML, sin framework ni build. Ábrelo en el navegador y funciona
+- **Persistencia local** — todos los datos en `localStorage`, sobrevive recargas sin servidor
+- **CRUD completo** — agrega, filtra y elimina títulos de tu registro
+- **Estado de visto** — marca títulos como `watched`, `pending` o `dropped`
+- **Estadísticas en vivo** — total, vistos, pendientes y promedio se actualizan en tiempo real
+- **UI bilingüe** — cambia entre inglés y español con un clic
+- **API REST opcional** — backend FastAPI con SQLite, endpoints CRUD completos y docs autogeneradas en `/docs`
+
+### Estructura
+
+```
+cinelog/
+├── index.html        ← Frontend standalone, no necesita servidor
+├── main.py           ← Backend FastAPI (opcional)
+├── models.py         ← Definición de tablas con SQLModel
+├── database.py       ← Motor SQLite y configuración de sesión
+├── requirements.txt  ← Dependencias Python (solo API)
+└── README.md
+```
+
+### Ejecutar el frontend
+
+Abre `index.html` en cualquier navegador. Sin instalación, sin servidor, sin configuración.
+
+### Ejecutar la API (opcional)
+
+```bash
+pip install -r requirements.txt
+uvicorn main:app --reload
+```
+
+API en `http://localhost:8000` · Docs en `http://localhost:8000/docs`
 
 ### Endpoints
 
@@ -100,43 +122,11 @@ API REST construida con FastAPI para registrar y calificar películas y series. 
 | `POST` | `/titles` | Agrega un nuevo título |
 | `PUT` | `/titles/{id}` | Actualiza un título |
 | `DELETE` | `/titles/{id}` | Elimina un título |
-
-### Estructura
-
-```
-cinelog-api/
-├── main.py           ← App FastAPI, definición de rutas
-├── models.py         ← Definición de tablas con SQLModel
-├── database.py       ← Engine y sesión de base de datos
-├── schemas.py        ← Esquemas de request y response
-├── requirements.txt
-└── README.md
-```
-
-### Ejecutar localmente
-
-```bash
-pip install -r requirements.txt
-uvicorn main:app --reload
-```
-
-API disponible en `http://localhost:8000` · Docs en `http://localhost:8000/docs`
-
-### Ejemplo de petición
-
-```bash
-curl -X POST http://localhost:8000/titles \
-  -H "Content-Type: application/json" \
-  -d '{"title": "Interstellar", "type": "movie", "genre": "sci-fi", "rating": 9, "status": "watched", "note": "Best third act in cinema."}'
-```
-
-### Cómo funciona
-
-FastAPI lee las definiciones de rutas en `main.py` y genera automáticamente el esquema OpenAPI. SQLModel vincula directamente los modelos de validación de Pydantic con las definiciones de tabla de SQLAlchemy, por lo que cada entrada es validada al ingresar y persistida en un archivo SQLite local. Sin migraciones, sin base de datos externa — solo ejecuta y listo.
+| `GET` | `/stats` | Conteos por estado, promedio, top calificados |
 
 ### Tecnologías
 
-Python · FastAPI · SQLModel · SQLite · Uvicorn · Pydantic
+HTML · CSS · JavaScript · localStorage · Python · FastAPI · SQLModel · SQLite · Uvicorn
 
 ---
 
